@@ -11,6 +11,8 @@ for(l in 1:26){
   val=LETTERS[l]
   print(val)
 
+  
+  #if(l>18){#ifblock
 # initiallizing 
 start = 0
 n = 50
@@ -98,10 +100,376 @@ if(identical(age_rating, character(0))){
 }
 
 }
+  #}#ifClose
 }
 
 
 game_table_distinct  <- distinct(game_table)
 
-#write.csv(game_table_distinct, file = "D:/DA/Semester_3/Research Project/Dataset/ign_video_games.csv")
+write.csv(game_table_distinct, file = "D:/DA/Semester_3/Research Project/Dataset/ign_video_games.csv")
+
+#for loop :: feature selection for platforms
+for(i in 1:nrow(game_table_distinct)){
+  print(i)
+  
+  platform_df <- data.frame("")
+  
+  if(grepl('Wii',game_table_distinct[i,5],ignore.case = TRUE)==TRUE){
+    #print('Wii')
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Wii")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Wii")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }
+  if(grepl('Xbox',game_table_distinct[i,5],ignore.case = TRUE)==TRUE){
+    #print('Xbox')
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Xbox")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Xbox")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }
+  if(grepl('PlayStation',game_table_distinct[i,5],ignore.case = TRUE)==TRUE){
+    #print('PlayStation')
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("PlayStation")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("PlayStation")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }
+  if(grepl('NES',game_table_distinct[i,5],ignore.case = TRUE)==TRUE){
+    #print('NES')
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("NES")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("NES")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }
+  if(grepl('Game Boy',game_table_distinct[i,5],ignore.case = TRUE)==TRUE){
+    #print('Game Boy')
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("GameBoy")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("GameBoy")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }
+  if(grepl('Nintendo',game_table_distinct[i,5],ignore.case = TRUE)==TRUE){
+    #print('Nintendo')
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Nintendo")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Nintendo")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }
+  if(grepl('PC',game_table_distinct[i,5],ignore.case = TRUE)==TRUE){
+    #print('PC')
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("PC")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("PC")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }
+  if(grepl('Macintosh',game_table_distinct[i,5],ignore.case = TRUE)==TRUE){
+    #print('Macintosh')
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Macintosh")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Macintosh")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }
+  if(grepl('Amiga',game_table_distinct[i,5],ignore.case = TRUE)==TRUE){
+    #print('Amiga')
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Amiga")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Amiga")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }
+  if(grepl('Genesis',game_table_distinct[i,5],ignore.case = TRUE)==TRUE){
+    #print('Genesis')
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Genesis")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Genesis")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }
+  if(grepl('GameCube',game_table_distinct[i,5],ignore.case = TRUE)==TRUE){
+    #print('GameCube')
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("GameCube")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("GameCube")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }
+  if(grepl('Lynx',game_table_distinct[i,5],ignore.case = TRUE)==TRUE){
+    #print('Lynx')
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Lynx")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Lynx")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }
+  if(grepl('Windows Phone',game_table_distinct[i,5],ignore.case = TRUE)==TRUE){
+    #print('Windows Phone')
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("WindowsPhone")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("WindowsPhone")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }
+  if(grepl('Arcade',game_table_distinct[i,5],ignore.case = TRUE)==TRUE){
+    #print('Arcade')
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Arcade")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Arcade")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }
+  if(grepl('iPhone',game_table_distinct[i,5],ignore.case = TRUE)==TRUE){
+    #print('iPhone')
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("iPhone")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("iPhone")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }
+  if(grepl('iPad',game_table_distinct[i,5],ignore.case = TRUE)==TRUE){
+    #print('iPad')
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("iPad")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("iPad")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }
+  if(grepl('Android',game_table_distinct[i,5],ignore.case = TRUE)==TRUE){
+    #print('Android')
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Android")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Android")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }
+  if(grepl('digiBLAST',game_table_distinct[i,5],ignore.case = TRUE)==TRUE){
+    #print('digiBLAST')
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("digiBLAST")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("digiBLAST")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }
+  if(grepl('Saturn',game_table_distinct[i,5],ignore.case = TRUE)==TRUE){
+    #print('Saturn')
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Saturn")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Saturn")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }
+  if(grepl('M2',game_table_distinct[i,5],ignore.case = TRUE)==TRUE){
+    #print('M2')
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("M2")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("M2")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }
+  if(grepl('TurboGrafx-16',game_table_distinct[i,5],ignore.case = TRUE)==TRUE){
+    #print('TurboGrafx-16')
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("TurboGrafx_16")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("TurboGrafx_16")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }
+  if(grepl('Wireless',game_table_distinct[i,5],ignore.case = TRUE)==TRUE){
+    #print('Wireless')
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Wireless")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Wireless")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }
+  if(grepl('Dreamcast',game_table_distinct[i,5],ignore.case = TRUE)==TRUE){
+    #print('Dreamcast')
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Dreamcast")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Dreamcast")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }
+  if(grepl('Gizmondo',game_table_distinct[i,5],ignore.case = TRUE)==TRUE){
+    #print('Gizmondo')
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Gizmondo")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Gizmondo")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }
+  if(grepl('Web Games',game_table_distinct[i,5],ignore.case = TRUE)==TRUE){
+    #print('Web Games')
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("WebGames")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("WebGames")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }
+  if(grepl('Master System',game_table_distinct[i,5],ignore.case = TRUE)==TRUE){
+    #print('Master System')
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("MasterSystem")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("MasterSystem")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }
+  if(grepl('3DO',game_table_distinct[i,5],ignore.case = TRUE)==TRUE){
+    #print('3DO')
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("3DO")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("3DO")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }
+  if(grepl('Atari',game_table_distinct[i,5],ignore.case = TRUE)==TRUE){
+    #print('Atari')
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Atari")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Atari")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }
+  if(grepl('Sega',game_table_distinct[i,5],ignore.case = TRUE)==TRUE){
+    #print('Sega')
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Sega")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Sega")
+    
+    platform_df <- cbind(temp_df,platform_df)
+  }
+  platform_df <- platform_df[,-30]
+  if(i>1){
+  platform_table <- rbind(platform_table,platform_df)
+  }else{
+    platform_table <- platform_df
+  }
+}
+
+test_df <- game_table_distinct
+test_df <- cbind(game_table_distinct,platform_table)
 
