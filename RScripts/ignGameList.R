@@ -473,3 +473,7 @@ for(i in 1:nrow(game_table_distinct)){
 test_df <- game_table_distinct
 test_df <- cbind(game_table_distinct,platform_table)
 
+#separating month and date
+test_df <- test_df %>% separate(release_date, c("Month", "Date","Year"),extra='drop')
+test_df <- test_df[,-5]
+test_df <- test_df[,-6]

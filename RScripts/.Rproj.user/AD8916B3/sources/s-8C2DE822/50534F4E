@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1570398805819.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "687477559",
+    "id" : "50534F4E",
+    "lastKnownWriteTime" : 1571261383,
+    "last_content_update" : 1571261383871,
+    "path" : "D:/DA/Semester_3/Research Project/Code/RScripts/ignGameList.R",
+    "project_path" : "ignGameList.R",
+    "properties" : {
+        "cursorPosition" : "475,18",
+        "scrollLine" : "454",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

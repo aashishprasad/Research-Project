@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1570729850141.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "2DF20A5C",
+    "lastKnownWriteTime" : 31244010180771956,
+    "last_content_update" : 1570729850141,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "47C98F56",
+        "caption" : "game_table_distinct",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=game_table_distinct&cache_key=47C98F56",
+        "displayedObservations" : 8529,
+        "environment" : "",
+        "object" : "game_table_distinct",
+        "preview" : 0,
+        "totalObservations" : 8529,
+        "variables" : 8
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}
