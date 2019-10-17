@@ -477,3 +477,12 @@ test_df <- cbind(game_table_distinct,platform_table)
 test_df <- test_df %>% separate(release_date, c("Month", "Date","Year"),extra='drop')
 test_df <- test_df[,-5]
 test_df <- test_df[,-6]
+
+#removing irrelevant platform columns
+test_df <- test_df[,-c(9:14,17,18,20,25,26,29)]
+
+#changing age rating "K-A" as "E"
+levels(test_df$age_rating)[2] <- "E"
+
+#removeing quotes
+test_df$age_rating <- gsub("\"","", test_df$age_rating)
