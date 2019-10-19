@@ -703,3 +703,9 @@ for(i in 1:nrow(test_df)){
 }
 
 test_df <- cbind(test_df,genre_table)
+
+#removing irrelevant genre columns
+test_df <- test_df[,-c(26:30)]
+
+#removing old genre column
+test_df <- test_df[,-c(4)]
