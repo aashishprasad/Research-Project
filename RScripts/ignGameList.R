@@ -470,19 +470,236 @@ for(i in 1:nrow(game_table_distinct)){
   }
 }
 
-test_df <- game_table_distinct
-test_df <- cbind(game_table_distinct,platform_table)
+#test_df <- game_table_distinct
+game_table_distinct <- cbind(game_table_distinct,platform_table)
 
 #separating month and date
-test_df <- test_df %>% separate(release_date, c("Month", "Date","Year"),extra='drop')
-test_df <- test_df[,-5]
-test_df <- test_df[,-6]
+game_table_distinct <- game_table_distinct %>% separate(release_date, c("Month", "Date","Year"),extra='drop')
+game_table_distinct <- game_table_distinct[,-5]
+game_table_distinct <- game_table_distinct[,-6]
 
 #removing irrelevant platform columns
-test_df <- test_df[,-c(9:14,17,18,20,25,26,29)]
+game_table_distinct <- game_table_distinct[,-c(9:14,17,18,20,25,26,29)]
 
 #changing age rating "K-A" as "E"
-levels(test_df$age_rating)[2] <- "E"
+levels(game_table_distinct$age_rating)[2] <- "E"
 
 #removeing quotes
-test_df$age_rating <- gsub("\"","", test_df$age_rating)
+game_table_distinct$age_rating <- gsub("\"","", game_table_distinct$age_rating)
+
+test_df <- game_table_distinct
+
+#for loop :: feature selection for genre
+for(i in 1:nrow(test_df)){
+  print(i)
+  
+  genre_df <- data.frame("")
+  
+  if(grepl('Action',test_df[i,4],ignore.case = TRUE)==TRUE){
+    #print('Wii')
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Action")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Action")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }
+  if(grepl('Sports',test_df[i,4],ignore.case = TRUE)==TRUE){
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Sports")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Sports")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }
+  if(grepl('Shooter',test_df[i,4],ignore.case = TRUE)==TRUE){
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Shooter")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Shooter")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }
+  if(grepl('Racing',test_df[i,4],ignore.case = TRUE)==TRUE){
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Racing")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Racing")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }
+  if(grepl('RPG',test_df[i,4],ignore.case = TRUE)==TRUE){
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("RPG")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("RPG")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }
+  if(grepl('Adventure',test_df[i,4],ignore.case = TRUE)==TRUE){
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Adventure")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Adventure")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }
+  if(grepl('Strategy',test_df[i,4],ignore.case = TRUE)==TRUE){
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Strategy")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Strategy")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }
+  if(grepl('Puzzle',test_df[i,4],ignore.case = TRUE)==TRUE){
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Puzzle")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Puzzle")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }
+  if(grepl('Platformer',test_df[i,4],ignore.case = TRUE)==TRUE){
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Platformer")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Platformer")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }
+  if(grepl('Fighting',test_df[i,4],ignore.case = TRUE)==TRUE){
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Fighting")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Fighting")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }
+  if(grepl('Simulation',test_df[i,4],ignore.case = TRUE)==TRUE){
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Simulation")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Simulation")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }
+  if(grepl('Music',test_df[i,4],ignore.case = TRUE)==TRUE){
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Music")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Music")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }
+  if(grepl('Flight',test_df[i,4],ignore.case = TRUE)==TRUE){
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Flight")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Flight")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }
+  if(grepl('Party',test_df[i,4],ignore.case = TRUE)==TRUE){
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Party")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Party")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }
+  if(grepl('Card',test_df[i,4],ignore.case = TRUE)==TRUE){
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Card")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Card")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }
+  if(grepl('Wrestling',test_df[i,4],ignore.case = TRUE)==TRUE){
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Wrestling")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Wrestling")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }
+  if(grepl('Hunting',test_df[i,4],ignore.case = TRUE)==TRUE){
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Hunting")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Hunting")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }
+  if(grepl('Educational',test_df[i,4],ignore.case = TRUE)==TRUE){
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("Educational")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("Educational")
+    
+    genre_df <- cbind(temp_df,genre_df)
+  }
+  genre_df <- genre_df[,-19]
+  if(i>1){
+    genre_table <- rbind(genre_table,genre_df)
+  }else{
+    genre_table <- genre_df
+  }
+}
+
+test_df <- cbind(test_df,genre_table)
