@@ -709,3 +709,28 @@ test_df <- test_df[,-c(26:30)]
 
 #removing old genre column
 test_df <- test_df[,-c(4)]
+
+dummy <- test_df
+#ctr= 0
+valid = 0
+#for loop :: to remove rows where all genres or platforms are '0' 
+for(i in 1:nrow(dummy)){
+  print(i)
+  for(j in 8:24){
+    print(dummy[i,j])
+    if(dummy[i,j] == 1){
+      valid = 1
+    }
+  }
+  if(valid != 1){
+    #print('found!!')
+    #ctr = ctr + 1
+    dummy <- dummy[-c(i),]
+  }
+  valid = 0
+}
+print(i)
+dummy[8439,9]
+install.packages('Hmisc')
+library(Hmisc)
+droplevels.factor(dummy)

@@ -3,6 +3,7 @@
 #install.packages("dplyr")
 library(dplyr)
 library(rvest)
+library(tidyr)
 #install.packages("purrr")
 
 flag = 0 #default value
@@ -478,6 +479,51 @@ game_table_distinct <- game_table_distinct %>% separate(release_date, c("Month",
 game_table_distinct <- game_table_distinct[,-5]
 game_table_distinct <- game_table_distinct[,-6]
 
+#creating 'other' column for games where platform count < 100
+#######################################################
+valid = 0
+
+#otherPlatform_df <- data.frame("")
+#colnames(otherPlatform_df) <- c("otherPlatform")
+
+for(i in 1:nrow(game_table_distinct)){
+  print(i)
+  
+  for(j in 9:29){
+    if(j<15 || j>16 && j<19 || j == 20 || j>24 && j <27 || j == 29){#specific platform columns
+      
+      if(game_table_distinct[i,j] == 1){
+         valid = 1
+        }
+    }
+  }
+  if(valid == 1){
+    
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("otherPlatform")
+    
+    if(i>1){
+      otherPlatform_df <- rbind(temp_df,otherPlatform_df)
+    }else{
+      otherPlatform_df <- temp_df
+    }
+    
+    valid = 0 #resetting valid as '0'
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("otherPlatform")
+    
+    if(i>1){
+      otherPlatform_df <- rbind(temp_df,otherPlatform_df)
+    }else{
+      otherPlatform_df <- temp_df
+    }
+  }
+}
+
+game_table_distinct <- cbind(game_table_distinct,otherPlatform_df)
+#######################################################
+
 #removing irrelevant platform columns
 game_table_distinct <- game_table_distinct[,-c(9:14,17,18,20,25,26,29)]
 
@@ -705,7 +751,28 @@ for(i in 1:nrow(test_df)){
 test_df <- cbind(test_df,genre_table)
 
 #removing irrelevant genre columns
-test_df <- test_df[,-c(26:30)]
+test_df <- test_df[,-c(27:31)]
 
 #removing old genre column
 test_df <- test_df[,-c(4)]
+
+dummy <- test_df
+ctr= 0
+valid = 0
+
+#for loop :: to remove rows where all genres == '0' 
+for(i in 1:nrow(dummy)){
+  print(i)
+  for(j in 26:38){
+    #print(dummy[i,j])
+    if(dummy[i,j] == 1){
+      valid = 1
+    }
+  }
+  if(valid != 1){
+    #print('found!!')
+    ctr = ctr + 1
+    #dummy <- dummy[-c(i),]
+  }
+  valid = 0
+}
