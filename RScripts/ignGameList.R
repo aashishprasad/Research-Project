@@ -1,10 +1,10 @@
 #Library for web scraping
 #install.packages("rvest")
 #install.packages("dplyr")
+#install.packages("purrr")
 library(dplyr)
 library(rvest)
 library(tidyr)
-#install.packages("purrr")
 
 flag = 0 #default value
 
@@ -12,8 +12,6 @@ for(l in 1:26){
   val=LETTERS[l]
   print(val)
 
-  
-  #if(l>18){#ifblock
 # initiallizing 
 start = 0
 n = 50
@@ -101,7 +99,6 @@ if(identical(age_rating, character(0))){
 }
 
 }
-  #}#ifClose
 }
 
 
@@ -479,12 +476,9 @@ game_table_distinct <- game_table_distinct %>% separate(release_date, c("Month",
 game_table_distinct <- game_table_distinct[,-5]
 game_table_distinct <- game_table_distinct[,-6]
 
-#creating 'other' column for games where platform count < 100
+#creating 'otherPlatform' column for games where platform count < 100
 #######################################################
 valid = 0
-
-#otherPlatform_df <- data.frame("")
-#colnames(otherPlatform_df) <- c("otherPlatform")
 
 for(i in 1:nrow(game_table_distinct)){
   print(i)
@@ -503,7 +497,7 @@ for(i in 1:nrow(game_table_distinct)){
     colnames(temp_df) <- c("otherPlatform")
     
     if(i>1){
-      otherPlatform_df <- rbind(temp_df,otherPlatform_df)
+      otherPlatform_df <- rbind(otherPlatform_df,temp_df)
     }else{
       otherPlatform_df <- temp_df
     }
@@ -514,7 +508,7 @@ for(i in 1:nrow(game_table_distinct)){
     colnames(temp_df) <- c("otherPlatform")
     
     if(i>1){
-      otherPlatform_df <- rbind(temp_df,otherPlatform_df)
+      otherPlatform_df <- rbind(otherPlatform_df,temp_df)
     }else{
       otherPlatform_df <- temp_df
     }
@@ -533,15 +527,14 @@ levels(game_table_distinct$age_rating)[2] <- "E"
 #removeing quotes
 game_table_distinct$age_rating <- gsub("\"","", game_table_distinct$age_rating)
 
-test_df <- game_table_distinct
 
 #for loop :: feature selection for genre
-for(i in 1:nrow(test_df)){
+for(i in 1:nrow(game_table_distinct)){
   print(i)
   
   genre_df <- data.frame("")
   
-  if(grepl('Action',test_df[i,4],ignore.case = TRUE)==TRUE){
+  if(grepl('Action',game_table_distinct[i,4],ignore.case = TRUE)==TRUE){
     #print('Wii')
     temp_df <- data.frame("1")
     colnames(temp_df) <- c("Action")
@@ -553,7 +546,7 @@ for(i in 1:nrow(test_df)){
     
     genre_df <- cbind(temp_df,genre_df)
   }
-  if(grepl('Sports',test_df[i,4],ignore.case = TRUE)==TRUE){
+  if(grepl('Sports',game_table_distinct[i,4],ignore.case = TRUE)==TRUE){
     temp_df <- data.frame("1")
     colnames(temp_df) <- c("Sports")
     
@@ -564,7 +557,7 @@ for(i in 1:nrow(test_df)){
     
     genre_df <- cbind(temp_df,genre_df)
   }
-  if(grepl('Shooter',test_df[i,4],ignore.case = TRUE)==TRUE){
+  if(grepl('Shooter',game_table_distinct[i,4],ignore.case = TRUE)==TRUE){
     temp_df <- data.frame("1")
     colnames(temp_df) <- c("Shooter")
     
@@ -575,7 +568,7 @@ for(i in 1:nrow(test_df)){
     
     genre_df <- cbind(temp_df,genre_df)
   }
-  if(grepl('Racing',test_df[i,4],ignore.case = TRUE)==TRUE){
+  if(grepl('Racing',game_table_distinct[i,4],ignore.case = TRUE)==TRUE){
     temp_df <- data.frame("1")
     colnames(temp_df) <- c("Racing")
     
@@ -586,7 +579,7 @@ for(i in 1:nrow(test_df)){
     
     genre_df <- cbind(temp_df,genre_df)
   }
-  if(grepl('RPG',test_df[i,4],ignore.case = TRUE)==TRUE){
+  if(grepl('RPG',game_table_distinct[i,4],ignore.case = TRUE)==TRUE){
     temp_df <- data.frame("1")
     colnames(temp_df) <- c("RPG")
     
@@ -597,7 +590,7 @@ for(i in 1:nrow(test_df)){
     
     genre_df <- cbind(temp_df,genre_df)
   }
-  if(grepl('Adventure',test_df[i,4],ignore.case = TRUE)==TRUE){
+  if(grepl('Adventure',game_table_distinct[i,4],ignore.case = TRUE)==TRUE){
     temp_df <- data.frame("1")
     colnames(temp_df) <- c("Adventure")
     
@@ -608,7 +601,7 @@ for(i in 1:nrow(test_df)){
     
     genre_df <- cbind(temp_df,genre_df)
   }
-  if(grepl('Strategy',test_df[i,4],ignore.case = TRUE)==TRUE){
+  if(grepl('Strategy',game_table_distinct[i,4],ignore.case = TRUE)==TRUE){
     temp_df <- data.frame("1")
     colnames(temp_df) <- c("Strategy")
     
@@ -619,7 +612,7 @@ for(i in 1:nrow(test_df)){
     
     genre_df <- cbind(temp_df,genre_df)
   }
-  if(grepl('Puzzle',test_df[i,4],ignore.case = TRUE)==TRUE){
+  if(grepl('Puzzle',game_table_distinct[i,4],ignore.case = TRUE)==TRUE){
     temp_df <- data.frame("1")
     colnames(temp_df) <- c("Puzzle")
     
@@ -630,7 +623,7 @@ for(i in 1:nrow(test_df)){
     
     genre_df <- cbind(temp_df,genre_df)
   }
-  if(grepl('Platformer',test_df[i,4],ignore.case = TRUE)==TRUE){
+  if(grepl('Platformer',game_table_distinct[i,4],ignore.case = TRUE)==TRUE){
     temp_df <- data.frame("1")
     colnames(temp_df) <- c("Platformer")
     
@@ -641,7 +634,7 @@ for(i in 1:nrow(test_df)){
     
     genre_df <- cbind(temp_df,genre_df)
   }
-  if(grepl('Fighting',test_df[i,4],ignore.case = TRUE)==TRUE){
+  if(grepl('Fighting',game_table_distinct[i,4],ignore.case = TRUE)==TRUE){
     temp_df <- data.frame("1")
     colnames(temp_df) <- c("Fighting")
     
@@ -652,7 +645,7 @@ for(i in 1:nrow(test_df)){
     
     genre_df <- cbind(temp_df,genre_df)
   }
-  if(grepl('Simulation',test_df[i,4],ignore.case = TRUE)==TRUE){
+  if(grepl('Simulation',game_table_distinct[i,4],ignore.case = TRUE)==TRUE){
     temp_df <- data.frame("1")
     colnames(temp_df) <- c("Simulation")
     
@@ -663,7 +656,7 @@ for(i in 1:nrow(test_df)){
     
     genre_df <- cbind(temp_df,genre_df)
   }
-  if(grepl('Music',test_df[i,4],ignore.case = TRUE)==TRUE){
+  if(grepl('Music',game_table_distinct[i,4],ignore.case = TRUE)==TRUE){
     temp_df <- data.frame("1")
     colnames(temp_df) <- c("Music")
     
@@ -674,7 +667,7 @@ for(i in 1:nrow(test_df)){
     
     genre_df <- cbind(temp_df,genre_df)
   }
-  if(grepl('Flight',test_df[i,4],ignore.case = TRUE)==TRUE){
+  if(grepl('Flight',game_table_distinct[i,4],ignore.case = TRUE)==TRUE){
     temp_df <- data.frame("1")
     colnames(temp_df) <- c("Flight")
     
@@ -685,7 +678,7 @@ for(i in 1:nrow(test_df)){
     
     genre_df <- cbind(temp_df,genre_df)
   }
-  if(grepl('Party',test_df[i,4],ignore.case = TRUE)==TRUE){
+  if(grepl('Party',game_table_distinct[i,4],ignore.case = TRUE)==TRUE){
     temp_df <- data.frame("1")
     colnames(temp_df) <- c("Party")
     
@@ -696,7 +689,7 @@ for(i in 1:nrow(test_df)){
     
     genre_df <- cbind(temp_df,genre_df)
   }
-  if(grepl('Card',test_df[i,4],ignore.case = TRUE)==TRUE){
+  if(grepl('Card',game_table_distinct[i,4],ignore.case = TRUE)==TRUE){
     temp_df <- data.frame("1")
     colnames(temp_df) <- c("Card")
     
@@ -707,7 +700,7 @@ for(i in 1:nrow(test_df)){
     
     genre_df <- cbind(temp_df,genre_df)
   }
-  if(grepl('Wrestling',test_df[i,4],ignore.case = TRUE)==TRUE){
+  if(grepl('Wrestling',game_table_distinct[i,4],ignore.case = TRUE)==TRUE){
     temp_df <- data.frame("1")
     colnames(temp_df) <- c("Wrestling")
     
@@ -718,7 +711,7 @@ for(i in 1:nrow(test_df)){
     
     genre_df <- cbind(temp_df,genre_df)
   }
-  if(grepl('Hunting',test_df[i,4],ignore.case = TRUE)==TRUE){
+  if(grepl('Hunting',game_table_distinct[i,4],ignore.case = TRUE)==TRUE){
     temp_df <- data.frame("1")
     colnames(temp_df) <- c("Hunting")
     
@@ -729,7 +722,7 @@ for(i in 1:nrow(test_df)){
     
     genre_df <- cbind(temp_df,genre_df)
   }
-  if(grepl('Educational',test_df[i,4],ignore.case = TRUE)==TRUE){
+  if(grepl('Educational',game_table_distinct[i,4],ignore.case = TRUE)==TRUE){
     temp_df <- data.frame("1")
     colnames(temp_df) <- c("Educational")
     
@@ -748,31 +741,56 @@ for(i in 1:nrow(test_df)){
   }
 }
 
-test_df <- cbind(test_df,genre_table)
+game_table_distinct <- cbind(game_table_distinct,genre_table)
 
-#removing irrelevant genre columns
-test_df <- test_df[,-c(27:31)]
+test_df <- game_table_distinct
 
-#removing old genre column
-test_df <- test_df[,-c(4)]
-
-dummy <- test_df
-ctr= 0
+#creating 'otherGenre' column for games where platform count < 100
+#######################################################
 valid = 0
 
-#for loop :: to remove rows where all genres == '0' 
-for(i in 1:nrow(dummy)){
+for(i in 1:nrow(game_table_distinct)){
   print(i)
-  for(j in 26:38){
-    #print(dummy[i,j])
-    if(dummy[i,j] == 1){
-      valid = 1
+  #i=8
+  for(j in 27:31){#specific genre columns
+    #if(j<32){
+      
+      if(game_table_distinct[i,j] == 1){
+        valid = 1
+      }
+    #}
+  }
+  if(valid == 1){
+    
+    temp_df <- data.frame("1")
+    colnames(temp_df) <- c("otherGenre")
+    
+    if(i>1){
+      otherGenre_df <- rbind(otherGenre_df,temp_df)
+    }else{
+      otherGenre_df <- temp_df
+    }
+    
+    valid = 0 #resetting valid as '0'
+  }else{
+    temp_df <- data.frame("0")
+    colnames(temp_df) <- c("otherGenre")
+    
+    if(i>1){
+      otherGenre_df <- rbind(otherGenre_df,temp_df)
+    }else{
+      otherGenre_df <- temp_df
     }
   }
-  if(valid != 1){
-    #print('found!!')
-    ctr = ctr + 1
-    #dummy <- dummy[-c(i),]
-  }
-  valid = 0
 }
+
+game_table_distinct <- cbind(game_table_distinct,otherGenre_df)
+#######################################################
+
+#removing irrelevant genre columns
+game_table_distinct <- game_table_distinct[,-c(27:31)]
+
+#removing old genre column
+game_table_distinct <- game_table_distinct[,-c(4)]
+
+#xxxxxxxx-----xxxxxxxxxx#
