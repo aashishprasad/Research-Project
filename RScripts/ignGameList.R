@@ -101,10 +101,7 @@ if(identical(age_rating, character(0))){
 }
 }
 
-
 game_table_distinct  <- distinct(game_table)
-
-write.csv(game_table_distinct, file = "D:/DA/Semester_3/Research Project/Dataset/ign_video_games.csv")
 
 #for loop :: feature selection for platforms
 for(i in 1:nrow(game_table_distinct)){
@@ -793,4 +790,6 @@ game_table_distinct <- game_table_distinct[,-c(27:31)]
 #removing old genre column
 game_table_distinct <- game_table_distinct[,-c(4)]
 
+#######################################################
+write.csv(game_table_distinct, file = "D:/DA/Semester_3/Research Project/Dataset/ign_video_games.csv")
 #xxxxxxxx-----xxxxxxxxxx#
