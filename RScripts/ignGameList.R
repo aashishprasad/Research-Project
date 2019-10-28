@@ -791,5 +791,5 @@ game_table_distinct <- game_table_distinct[,-c(27:31)]
 game_table_distinct <- game_table_distinct[,-c(4)]
 
 #######################################################
-write.csv(game_table_distinct, file = "D:/DA/Semester_3/Research Project/Dataset/ign_video_games.csv")
+write.csv(game_table_distinct, file = "D:/DA/Semester_3/Research Project/Dataset/ign_video_games.csv",fileEncoding = 'UTF-8')
 #xxxxxxxx-----xxxxxxxxxx#
