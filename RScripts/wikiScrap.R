@@ -102,7 +102,7 @@ test_df <- data.frame(final_game_data)
 for(i in 1:nrow(final_game_data)){
   print(i)
   #flag=0
-  i=22
+  #i=22
   url <- final_game_data[i,50]
   #fix for #18 & #33
   if(i == 14){
@@ -140,4 +140,3 @@ for(i in 1:nrow(final_game_data)){
 #######################################################
 write.csv(test_df, file = "D:/DA/Semester_3/Research Project/Dataset/final_video_game_data.csv",fileEncoding = 'UTF-8')
 #xxxxxxxx-----xxxxxxxxxx#
-
