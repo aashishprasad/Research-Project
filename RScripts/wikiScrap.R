@@ -102,12 +102,12 @@ test_df <- data.frame(final_game_data)
 for(i in 1:nrow(final_game_data)){
   print(i)
   #flag=0
-  #i=40
+  i=22
   url <- final_game_data[i,50]
   #fix for #18 & #33
-  if(i == 18){
+  if(i == 14){
     url <- paste(url,"_(video_game)",sep = '')
-  }else if(i == 33){
+  }else if(i == 22){
     url<- "https://en.wikipedia.org/wiki/AO_Tennis_(video_game)"
   }
   page <- read_html(as.vector(url))
@@ -122,6 +122,7 @@ for(i in 1:nrow(final_game_data)){
       }else if(j==3){
         print(j)
         game_text <- page%>%html_nodes("tr:nth-child(4) td")%>%html_text()
+        test_df[i,j] <- game_text[1]
       }else if(j==4){
         print(j)
         #game_text <- page%>%html_nodes("li:nth-child(1)")%>%html_text()
@@ -136,4 +137,7 @@ for(i in 1:nrow(final_game_data)){
   }
 }
 
+#######################################################
+write.csv(test_df, file = "D:/DA/Semester_3/Research Project/Dataset/final_video_game_data.csv",fileEncoding = 'UTF-8')
+#xxxxxxxx-----xxxxxxxxxx#
 
