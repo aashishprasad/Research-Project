@@ -57,6 +57,8 @@ for(i in 1:nrow(wiki_url)){
   
 }
 
+sentiment_table <- data.frame(sapply(sentiment_table, as.numeric))#converting characters to numeric
+
 #merging sentiments with descriptive game data
 final_game_data <- cbind(game_table_distinct,sentiment_table)
 final_game_data <- cbind(final_game_data,wiki_url$url)
@@ -66,7 +68,7 @@ final_game_data <- cbind(final_game_data,wiki_url$url)
 #checking valid rows
 valid=0
 for(i in 1:nrow(sentiment_table)){
-  print(i)
+  #print(i)
   flag=0
   for(j in 1:10){
     if(sentiment_table[i,j]!='0'){
@@ -95,7 +97,15 @@ final_game_data <- final_game_data[,-c(51)]
 rownames(final_game_data) <- 1:nrow(final_game_data)#resetting row numbering
 #view_table <- cbind(wiki_url,sentiment_table)
 
-final_game_data <- data.frame(lapply(final_game_data, as.character), stringsAsFactors=FALSE)#converting factors to characters
+#converting factors to characters
+final_game_data$developer <- as.character(final_game_data$developer)
+final_game_data$publisher <- as.character(final_game_data$publisher)
+
+#converting factors to numeric
+final_game_data$game_rating <- as.numeric(as.character(final_game_data$game_rating))
+#final_game_data$developer <- data.frame(sapply(final_game_data$developer, as.character), stringsAsFactors=FALSE)#converting factors to characters
+#final_game_data$publisher <- data.frame(sapply(final_game_data$publisher, as.character), stringsAsFactors=FALSE)#converting factors to characters
+
 test_df <- data.frame(final_game_data)
 ##########################
 #imputing missing values
@@ -116,21 +126,21 @@ for(i in 1:nrow(final_game_data)){
     if(is.na(final_game_data[i,j])||final_game_data[i,j]=='N/A'||final_game_data[i,j]=='TBA'||final_game_data[i,j]=='released'||final_game_data[i,j]=='N'){
     #print('found')
       if(j==2){
-        print(i)
+        #print(i)
         game_text <- page%>%html_nodes("tr:nth-child(3) td")%>%html_text()
         test_df[i,j] <- game_text[1]
       }else if(j==3){
-        print(j)
+        #print(j)
         game_text <- page%>%html_nodes("tr:nth-child(4) td")%>%html_text()
         test_df[i,j] <- game_text[1]
       }else if(j==4){
-        print(j)
+        #print(j)
         #game_text <- page%>%html_nodes("li:nth-child(1)")%>%html_text()
       }else if(j==5){
-        print(j)
+        #print(j)
         #game_text <- page%>%html_nodes("li:nth-child(1)")%>%html_text()
       }else if(j==6){
-        print(j)
+        #print(j)
         #game_text <- page%>%html_nodes("h2+ p,h3+p")%>%html_text()
       }
     }
