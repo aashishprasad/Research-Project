@@ -106,8 +106,22 @@ final_game_data$game_rating <- as.numeric(as.character(final_game_data$game_rati
 #final_game_data$developer <- data.frame(sapply(final_game_data$developer, as.character), stringsAsFactors=FALSE)#converting factors to characters
 #final_game_data$publisher <- data.frame(sapply(final_game_data$publisher, as.character), stringsAsFactors=FALSE)#converting factors to characters
 
+######################################
+#feature selection for 'developer' and 'publisher'
+for(d in 1:nrow(final_game_data)){
+  
+  if(countifs(final_game_data$publisher,final_game_data[d,3])<15){
+    final_game_data[d,3] <- 'other'
+    
+  }
+  
+  if(countifs(final_game_data$developer,final_game_data[d,2])<5){
+    final_game_data[d,2] <- 'other'
+  }
+}
+######################################
 test_df <- data.frame(final_game_data)
-##########################
+####-------------####
 #imputing missing values
 for(i in 1:nrow(final_game_data)){
   print(i)
@@ -147,6 +161,137 @@ for(i in 1:nrow(final_game_data)){
   }
 }
 
+
 #######################################################
 write.csv(test_df, file = "D:/DA/Semester_3/Research Project/Dataset/final_video_game_data.csv",fileEncoding = 'UTF-8')
 #xxxxxxxx-----xxxxxxxxxx#
+# test_df$age_rating <- factor(test_df$age_rating)
+# test_df$game_rating <- as.numeric(test_df$game_rating)
+# test_df$Dreamcast <- factor(test_df$Dreamcast)
+# test_df$Wireless <- factor(test_df$Wireless)
+# test_df$Saturn <- factor(test_df$Saturn)
+# test_df$Android <- factor(test_df$Android)
+# test_df$iPad <- factor(test_df$iPad)
+# test_df$iPhone <- factor(test_df$iPhone)
+# test_df$Arcade <- factor(test_df$Arcade)
+# test_df$GameCube <- factor(test_df$GameCube)
+# test_df$Genesis <- factor(test_df$Genesis)
+# test_df$Macintosh <- factor(test_df$Macintosh)
+# test_df$PC <- factor(test_df$PC)
+# test_df$Nintendo <- factor(test_df$Nintendo)
+# test_df$GameBoy <-as.character(as.numeric(test_df$Gameboy))
+# test_df$NES <- factor(test_df$NES)
+# test_df$PlayStation <- factor(test_df$PlayStation)
+# test_df$Xbox <- factor(test_df$Xbox)
+# test_df$Wii <- factor(test_df$Wii)
+# test_df$otherPlatform <- factor(test_df$otherPlatform)
+# test_df$Flight <- factor(test_df$Flight)
+# test_df$Music <- factor(test_df$Music)
+# test_df$Simulation <- factor(test_df$Simulation)
+# test_df$Fighting <- factor(test_df$Fighting)
+# test_df$Platformer <- factor(test_df$Platformer)
+##################################################
+data <- test_df
+data <- data[,c(-1,-50)]
+
+data$developer <- factor((data$developer))
+data$publisher <- factor((data$publisher))
+data$Month <- factor((data$Month))
+data$Year <- factor((data$Year))
+data$age_rating <- factor((data$age_rating))
+#################################################
+
+data$developer <- as.integer(as.factor(data$developer))
+data$publisher <- as.integer(as.factor(data$publisher))
+data$Month <- as.integer(as.factor(data$Month))
+data$Year <- as.integer(as.factor(data$Year))
+data$age_rating <- as.integer(as.factor(data$age_rating))
+
+data$Dreamcast <- as.numeric(as.character(data$Dreamcast))
+data$Wireless <- as.numeric(as.character(data$Wireless))
+data$Saturn <- as.numeric(as.character(data$Saturn))
+data$Android <- as.numeric(as.character(data$Android))
+data$iPad <- as.numeric(as.character(data$iPad))
+data$iPhone <- as.numeric(as.character(data$iPhone))
+data$Arcade <- as.numeric(as.character(data$Arcade))
+data$GameCube <- as.numeric(as.character(data$GameCube))
+data$Genesis <- as.numeric(as.character(data$Genesis))
+data$Macintosh <- as.numeric(as.character(data$Macintosh))
+data$PC <- as.numeric(as.character(data$PC))
+data$Nintendo <- as.numeric(as.character(data$Nintendo))
+data$GameBoy <- as.numeric(as.character(data$GameBoy))
+data$NES <- as.numeric(as.character(data$NES))
+data$PlayStation <- as.numeric(as.character(data$PlayStation))
+data$Xbox <- as.numeric(as.character(data$Xbox))
+data$Wii <- as.numeric(as.character(data$Wii))
+data$otherPlatform <- as.numeric(as.character(data$otherPlatform))
+data$Flight <- as.numeric(as.character(data$Flight))
+data$Music <- as.numeric(as.character(data$Music))
+data$Simulation <- as.numeric(as.character(data$Simulation))
+data$Fighting <- as.numeric(as.character(data$Fighting))
+data$Platformer <- as.numeric(as.character(data$Platformer))
+data$Puzzle <- as.numeric(as.character(data$Puzzle))
+data$Strategy <- as.numeric(as.character(data$Strategy))
+data$Adventure <- as.numeric(as.character(data$Adventure))
+data$RPG <- as.numeric(as.character(data$RPG))
+data$Racing <- as.numeric(as.character(data$Racing))
+data$Shooter <- as.numeric(as.character(data$Shooter))
+data$Sports <- as.numeric(as.character(data$Sports))
+data$Action <- as.numeric(as.character(data$Action))
+data$otherGenre <- as.numeric(as.character(data$otherGenre))
+
+
+#output <- lm(data$game_rating ~ data$positive+data$negative+data$anger+data$anticipation+data$disgust+data$fear+
+#               data$joy+data$sadness+data$surprise)
+#output <- lm(data$game_rating ~ ., data = data)
+data <- na.omit(data)
+data$game_rating = log(data$game_rating)
+#################################################
+library(caTools) 
+
+set.seed(123) 
+split = sample.split(data$game_rating, SplitRatio = 0.70)
+
+training_set = subset(data, split == TRUE)
+test_set = subset(data, split == FALSE)
+
+# Scaling 
+#training_set[-6] = scale(training_set[-6]) 
+#test_set[-6] = scale(test_set[-6])
+
+output <- lm(training_set$game_rating ~ ., data = training_set)
+pred <- predict(output, newdata = test_set[-6])
+#######################
+# RMSE
+#install.packages("Metrics")
+library(caret)
+#Model performance
+data.frame(
+  RMSE = RMSE(pred, test_set$game_rating),
+  R2 = R2(pred, test_set$game_rating)
+)
+
+#######################
+#Correlation
+data.cor = cor(data[,-c(7:38)], method = c("spearman"),use="pairwise.complete.obs")
+#install.packages("corrplot")
+library(corrplot)
+corrplot(data.cor)
+summary(output)#######################
+T_log = log(data$game_rating)
+
+#install.packages("rcompanion")
+library(rcompanion)
+
+plotNormalHistogram(T_log)
+plotNormalHistogram(data$game_rating)
+
+###################################
+
+countifs<-function(x,v){
+  sum(ifelse(x==v,1,0))}
+countifs(game_table_distinct$publisher,'Nintendo')
+for (publisher in unique(game_table_distinct$publisher)){
+  print(countifs(game_table_distinct$publisher,publisher))}
+  
+  for (publisher in unique(game_table_distinct$publisher)){}
