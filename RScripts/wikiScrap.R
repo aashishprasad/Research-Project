@@ -215,9 +215,9 @@ write.csv(test_df, file = "D:/DA/Semester_3/Research Project/Dataset/final_video
 # test_df$Fighting <- factor(test_df$Fighting)
 # test_df$Platformer <- factor(test_df$Platformer)
 ##################################################
-data <- test_df
-#data <- read.csv("D:/DA/Semester_3/Research Project/Dataset/final_video_game_data.csv")
-data <- data[,c(-1,-50)]
+#data <- test_df
+data <- read.csv("D:/DA/Semester_3/Research Project/Dataset/final_video_game_data.csv")
+data <- data[,-c(1,2,51)]
 data$game_rating <- floor(data$game_rating)
 
 ########### Re-run countifs
@@ -463,23 +463,25 @@ game_df <- attStats(boruta.game)
 library(data.table)
 setDT(game_df, keep.rownames = TRUE)[]
 write.csv(game_df, file = "D:/DA/Semester_3/Research Project/Dataset/boruta_result.csv",fileEncoding = 'UTF-8')
-selected_game_df <- game_df %>% filter(game_df$decision == 'Confirmed')
+#selected_game_df <- game_df %>% filter(game_df$decision == 'Confirmed')
+selected_game_df <- df[,-c(3,4,9,10,14,17,18,20:24,26,31,34,45:55,57,59:61,63,64,67:75,78:81,83:102,104,106,108,109,111,112,115,117:129,132:187,189,191,192,195:198,200:211,213:216,218:237,239:242)]
 #############################################################################
 #SVM
 library(caTools) 
 
 set.seed(123) 
-#df$game_rating <- factor(df$game_rating)
-split = sample.split(df$game_rating, SplitRatio = 0.70)
+split = sample.split(selected_game_df$game_rating, SplitRatio = 0.70)
 
-training = subset(df, split == TRUE)
-testing = subset(df, split == FALSE)
+training = subset(selected_game_df, split == TRUE)
+testing = subset(selected_game_df, split == FALSE)
 
 # Scaling 
 training[-2] = scale(training[-2]) 
 testing[-2] = scale(testing[-2])
 
 #training <- na.omit(training)
+#training <- training[,-c(53)]
+#testing <- testing[,-c(53)]
 
 library(e1071)
 classifier = svm(formula = game_rating ~ ., data = training, type = 'C-classification', kernel = 'radial')
@@ -497,3 +499,37 @@ caret::confusionMatrix(y_pred,testing$game_rating, positive = '1')
 # test_pred
 # confusionMatrix(table(test_pred, testing$game_rating))
 
+#############################################
+#install.packages("randomForest")
+library(randomForest)
+
+# Split into Train and Validation sets
+# Training Set : Validation Set = 70 : 30 (random)
+set.seed(100)
+train <- sample(nrow(selected_game_df[,-c(30)]), 0.7*nrow(selected_game_df[,-c(30)]), replace = FALSE)
+TrainSet <- selected_game_df[train,]
+ValidSet <- selected_game_df[-train,]
+
+#install.packages("janitor")
+library(janitor)
+TrainSet <- clean_names(TrainSet)#removing spaces and special characters from column names
+ValidSet <- clean_names(ValidSet)
+
+# Create a Random Forest model with default parameters
+model1 <- randomForest(as.factor(game_rating) ~ ., data = TrainSet, importance = TRUE)
+# Fine tuning parameters of Random Forest model
+model2 <- randomForest(as.factor(game_rating) ~ ., data = TrainSet, ntree = 500, mtry = 6, importance = TRUE)
+
+# Predicting on train set
+predTrain <- predict(model2, TrainSet, type = "class")
+# Checking classification accuracy
+#mean(predTrain == TrainSet$game_rating)
+table(predTrain, TrainSet$game_rating)  
+
+# Predicting on Validation set
+predValid <- predict(model2, ValidSet, type = "class")
+# Checking classification accuracy
+mean(predValid == ValidSet$game_rating)                    
+table(predValid,ValidSet$game_rating)
+
+########################################################################
