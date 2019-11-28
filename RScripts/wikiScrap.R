@@ -69,18 +69,26 @@ sentiment_table <- data.frame(sapply(sentiment_table, as.numeric))#converting ch
 game_table_distinct <- read.csv("D:/DA/Semester_3/Research Project/Dataset/ign_video_games.csv")
 
 #storing game texts
-tbl <- cbind(wiki_url,wiki_tbl)
-tbl <- tbl[,-c(2)]
-rownames(tbl) <- 1:nrow(tbl)
-tbl <- cbind(tbl,game_table_distinct$game_rating)
-tbl$`game_table_distinct$game_rating` <- floor(tbl$`game_table_distinct$game_rating`)
-colnames(tbl) <- c("game_name","game_text","game_ratings")
-write.csv(tbl, file = "D:/DA/Semester_3/Research Project/Dataset/game_data.csv",fileEncoding = 'UTF-8')
+# tbl <- cbind(wiki_url,wiki_tbl)
+# tbl <- tbl[,-c(2)]
+# rownames(tbl) <- 1:nrow(tbl)
+# tbl <- cbind(tbl,game_table_distinct$game_rating)
+# #tbl$`game_table_distinct$game_rating` <- floor(tbl$`game_table_distinct$game_rating`)
+# colnames(tbl) <- c("game_name","game_text","game_ratings")
+# write.csv(tbl, file = "D:/DA/Semester_3/Research Project/Dataset/game_data.csv",fileEncoding = 'UTF-8')
+
+#merging and saving game data with plots
+# tbl <- cbind(game_table_distinct,wiki_tbl)
+# rownames(tbl) <- 1:nrow(tbl)
+# tbl <- tbl[,-c(1)]
+# write.csv(tbl, file = "D:/DA/Semester_3/Research Project/Dataset/game_data.csv",fileEncoding = 'UTF-8')
 
 #merging sentiments with descriptive game data
 final_game_data <- cbind(game_table_distinct,sentiment_table)
 final_game_data <- cbind(final_game_data,wiki_url$url)
+final_game_data <- cbind(final_game_data,wiki_tbl)
 final_game_data <- final_game_data[,-c(1)]
+rownames(final_game_data) <- 1:nrow(final_game_data)#resetting row numbering
 ##########################
 
 #checking valid rows
@@ -109,10 +117,10 @@ for(i in 1:nrow(sentiment_table)){
 
 #removing rows with 'valid' as NA
 final_game_data <- cbind(final_game_data,dummy_df)
-final_game_data <- final_game_data[complete.cases(final_game_data[ , 51]),]
-final_game_data <- final_game_data[,-c(51)]
+final_game_data <- final_game_data[complete.cases(final_game_data[ , 52]),]
+final_game_data <- final_game_data[,-c(52)]
 
-rownames(final_game_data) <- 1:nrow(final_game_data)#resetting row numbering
+#rownames(final_game_data) <- 1:nrow(final_game_data)#resetting row numbering
 #view_table <- cbind(wiki_url,sentiment_table)
 
 #converting factors to characters
@@ -187,7 +195,7 @@ for(i in 1:nrow(test_df)){
 
 
 #######################################################
-write.csv(test_df, file = "D:/DA/Semester_3/Research Project/Dataset/final_video_game_data.csv",fileEncoding = 'UTF-8')
+#write.csv(test_df, file = "D:/DA/Semester_3/Research Project/Dataset/final_video_game_data.csv",fileEncoding = 'UTF-8')
 #xxxxxxxx-----xxxxxxxxxx#
 # test_df$age_rating <- factor(test_df$age_rating)
 # test_df$game_rating <- as.numeric(test_df$game_rating)
@@ -216,24 +224,30 @@ write.csv(test_df, file = "D:/DA/Semester_3/Research Project/Dataset/final_video
 # test_df$Platformer <- factor(test_df$Platformer)
 ##################################################
 #data <- test_df
-data <- read.csv("D:/DA/Semester_3/Research Project/Dataset/final_video_game_data.csv")
-data <- data[,-c(1,2,51)]
-data$game_rating <- floor(data$game_rating)
+#test_df <- read.csv("D:/DA/Semester_3/Research Project/Dataset/final_video_game_data.csv")
+#test_df <- test_df[,-c(50)]
+#data$game_rating <- floor(data$game_rating)
 
 ########### Re-run countifs
 #feature selection for 'developer' and 'publisher'
-for(d in 1:nrow(data)){
+for(d in 1:nrow(test_df)){
   
-    if(countifs(na.omit(data$publisher),data[d,2])<15){
-      data[d,2] <- 'other'
+    if(countifs(na.omit(test_df$publisher),test_df[d,3])<15){
+      test_df[d,3] <- 'other'
     }
   
-    if(countifs(na.omit(data$developer),data[d,1])<10){
-      data[d,1] <- 'other'
+    if(countifs(na.omit(test_df$developer),test_df[d,2])<10){
+      test_df[d,2] <- 'other'
     }
 }
-###########
-
+############
+write.csv(test_df[,-c(50)], file = "D:/DA/Semester_3/Research Project/Dataset/game_data.csv",fileEncoding = 'UTF-8')
+############
+write.csv(test_df[,-c(50,51)], file = "D:/DA/Semester_3/Research Project/Dataset/final_video_game_data.csv",fileEncoding = 'UTF-8')
+############
+data <- read.csv("D:/DA/Semester_3/Research Project/Dataset/final_video_game_data.csv")
+data <- data[,-c(1,2)]
+############
 data$developer <- factor((data$developer))
 data$publisher <- factor((data$publisher))
 data$Month <- factor((data$Month))
@@ -484,21 +498,40 @@ testing[-2] = scale(testing[-2])
 #testing <- testing[,-c(53)]
 
 library(e1071)
-classifier = svm(formula = game_rating ~ ., data = training, type = 'C-classification', kernel = 'radial')
-y_pred = predict(classifier, newdata = testing[-2])
-
-
-# Confusion Matrix 
-cm = table(testing[, 2], y_pred)
-sum(diag(cm))/sum(cm)
+model = svm(formula = game_rating ~ ., data = training, type = "eps-regression", kernel = 'radial')
+y_pred = predict(model, newdata = testing[-2])
 
 library(caret)
-caret::confusionMatrix(y_pred,testing$game_rating, positive = '1')
+#Model performance
+data.frame(
+  RMSE = RMSE(y_pred,testing$game_rating),
+  R2 = R2(y_pred,testing$game_rating)
+)
+
+# Confusion Matrix 
+#cm = table(testing[, 2], y_pred)
+#sum(diag(cm))/sum(cm)
+
+#library(caret)
+#caret::confusionMatrix(y_pred,testing$game_rating, positive = '1')
 
 # test_pred <- predict(svm_Radial, newdata = testing)
 # test_pred
 # confusionMatrix(table(test_pred, testing$game_rating))
-
+#############################################
+# intrain <- createDataPartition(y = selected_game_df$game_rating, p= 0.7, list = FALSE)
+# training <- data[intrain,]
+# testing <- data[-intrain,]
+# 
+# trctrl <- trainControl(method = "repeatedcv", number = 10, repeats = 3)
+# svm_Linear <- train(game_rating ~., data = training, method = "svmLinear",
+#                      trControl=trctrl,
+#                      preProcess = c("center", "scale"),
+#                      tuneLength = 10)
+library(e1071)
+dat = data.frame(selected_game_df[,-c(2)], y = as.factor(selected_game_df$game_rating))
+svmfit = svm(y ~ ., data = dat, kernel = "linear", cost = 10, scale = FALSE)
+print(svmfit)
 #############################################
 #install.packages("randomForest")
 library(randomForest)
@@ -516,20 +549,84 @@ TrainSet <- clean_names(TrainSet)#removing spaces and special characters from co
 ValidSet <- clean_names(ValidSet)
 
 # Create a Random Forest model with default parameters
-model1 <- randomForest(as.factor(game_rating) ~ ., data = TrainSet, importance = TRUE)
+model1 <- randomForest(game_rating ~ ., data = TrainSet, importance = TRUE)
+
 # Fine tuning parameters of Random Forest model
-model2 <- randomForest(as.factor(game_rating) ~ ., data = TrainSet, ntree = 500, mtry = 6, importance = TRUE)
+model2 <- randomForest(game_rating ~ ., data = TrainSet, ntree = 500, mtry = 6, importance = TRUE)
 
 # Predicting on train set
-predTrain <- predict(model2, TrainSet, type = "class")
+#predTrain <- predict(model2, TrainSet, type = "class")
+predTrain <- predict(model2, TrainSet)
+
+#root mean square error with anti log
+# rmse<-function(actual,pred)
+# {
+#   sqrt( sum( (actual - pred)^2 , na.rm = TRUE ) / length(actual) )
+# }
+# R2(ValidSet$game_rating,predTrain)
+
+
+
+
+
+
 # Checking classification accuracy
 #mean(predTrain == TrainSet$game_rating)
 table(predTrain, TrainSet$game_rating)  
 
 # Predicting on Validation set
-predValid <- predict(model2, ValidSet, type = "class")
+#predValid <- predict(model2, ValidSet, type = "class")
+predValid <- predict(model2, ValidSet)
+
 # Checking classification accuracy
 mean(predValid == ValidSet$game_rating)                    
 table(predValid,ValidSet$game_rating)
 
+# RMSE
+#install.packages("Metrics")
+library(caret)
+#Model performance
+data.frame(
+  RMSE = RMSE(predValid,ValidSet$game_rating),
+  R2 = R2(predValid,ValidSet$game_rating)
+)
+
+
+######################## test #####################
+library(rpart)  
+set.seed(12345)
+# Training with classification tree
+modfit.rpart <- rpart(game_rating ~ ., data=TrainSet, method="class", xval = 4)
+print(modfit.rpart, digits = 3)
+
+
+
+
+predictions1 <- predict(modfit.rpart, ValidSet, type = "class")
+
+# Accuracy and other metrics
+confusionMatrix(predictions1, as.factor(ValidSet$game_rating))
+
+
+
+
+
+# Predict the testing set with the trained model 
+predictions1 <- predict(modfit.rpart, testing, type = "class")
+
+# Accuracy and other metrics
+confusionMatrix(predictions1, testing$classe)
+
+
 ########################################################################
+library(caret)
+control_xgb <- trainControl(method="repeatedcv", number=10, repeats=5, search="random")
+set.seed(1337)
+
+xgbm_random <- caret::train(game_rating ~ .,data=TrainSet,
+                            method="xgbTree",
+                            trControl=control_xgb)
+##########################################
+#PCA
+tcars.pca <- prcomp(selected_game_df[,-c(2)], center = TRUE,scale. = TRUE)
+
