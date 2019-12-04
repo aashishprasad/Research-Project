@@ -1,4 +1,6 @@
 #install.packages('syuzhet')
+#install.packages("tidyr")
+#install.packages("dplyr")
 library(syuzhet)
 library(rvest)
 library(tidytext)
@@ -247,7 +249,11 @@ write.csv(test_df[,-c(50,51)], file = "D:/DA/Semester_3/Research Project/Dataset
 ############
 data <- read.csv("D:/DA/Semester_3/Research Project/Dataset/final_video_game_data.csv")
 data <- data[,-c(1,2)]
-############
+
+#replacing sentiments with NLP sentiments
+data <- data[,-c(39:48)]
+data <- cbind(data,nlp_sentiment_table)
+################################################
 data$developer <- factor((data$developer))
 data$publisher <- factor((data$publisher))
 data$Month <- factor((data$Month))
@@ -337,8 +343,20 @@ data <- na.omit(data)
 #eliminating rows with irrrelavent month values
 data <- data %>% filter(data$Month == 'January' | data$Month=='Febuary' | data$Month == 'March' | data$Month == 'April' | data$Month == 'May' | data$Month == 'June' | data$Month == 'July' | data$Month == 'August' | data$Month == 'September' | data$Month == 'October' | data$Month == 'November' | data$Month == 'December')
 
-#data$game_rating = log(data$game_rating)+1
-#################################################
+write.csv(data, file = "D:/DA/Semester_3/Research Project/Dataset/final_video_game_dataset_1.csv",fileEncoding = 'UTF-8')
+##################################################
+#selecting rows with Year > = '2000'
+data <- data %>% filter(data$Year >= '2000')
+write.csv(data, file = "D:/DA/Semester_3/Research Project/Dataset/final_video_game_dataset_2.csv",fileEncoding = 'UTF-8')
+##################################################
+#remove 'other' from publisher
+data <- data %>% filter(data$publisher != 'other')
+write.csv(data, file = "D:/DA/Semester_3/Research Project/Dataset/final_video_game_dataset_3.csv",fileEncoding = 'UTF-8')
+##################################################
+#remove 'other' from developer
+data <- data %>% filter(data$developer != 'other')
+write.csv(data, file = "D:/DA/Semester_3/Research Project/Dataset/final_video_game_dataset_4.csv",fileEncoding = 'UTF-8')
+##################################################
 #install.packages("mltools")
 library(data.table)
 library(mltools)
@@ -374,12 +392,13 @@ library(caTools)
 # newdata1 <- as.data.frame(newdata1)
 data_month <- data_month[,-c(3:6,8:10,12,15,18:20,23:25,27:29)]
 df <- cbind(data,data_month)
-data_age_ratings <- data_age_ratings[,-c(1,4)]
+data_age_ratings <- data_age_ratings[,-c(1)]
 df <- cbind(df,data_age_ratings)
 df <- cbind(df,data_publisher)
-data_developer <- data_developer[,-c(5)]
+#data_developer <- data_developer[,-c(5)]
 df <- cbind(df,data_developer)
 df <- df[,-c(1:3,5)]
+
 #################################################
 set.seed(123)
 split = sample.split(df$game_rating, SplitRatio = 0.70)
@@ -453,6 +472,7 @@ pairs(game_rating ~ developer+publisher+age_rating+Month+Year+anger+anticipation
 #                     preProcess = c("center", "scale"),
 #                     tuneLength = 10)
 #############################################################################
+#df[45:241] <- lapply(df[45:241] , factor)
 library(Boruta)
 set.seed(111)
 boruta.game_train <- Boruta(game_rating~., data = df, doTrace = 2)
@@ -479,6 +499,7 @@ setDT(game_df, keep.rownames = TRUE)[]
 write.csv(game_df, file = "D:/DA/Semester_3/Research Project/Dataset/boruta_result.csv",fileEncoding = 'UTF-8')
 #selected_game_df <- game_df %>% filter(game_df$decision == 'Confirmed')
 selected_game_df <- df[,-c(3,4,9,10,14,17,18,20:24,26,31,34,45:55,57,59:61,63,64,67:75,78:81,83:102,104,106,108,109,111,112,115,117:129,132:187,189,191,192,195:198,200:211,213:216,218:237,239:242)]
+#selected_game_df$Year <- as.integer(selected_game_df$Year)
 #############################################################################
 #SVM
 library(caTools) 
@@ -538,7 +559,7 @@ library(randomForest)
 
 # Split into Train and Validation sets
 # Training Set : Validation Set = 70 : 30 (random)
-set.seed(100)
+set.seed(123)
 train <- sample(nrow(selected_game_df[,-c(30)]), 0.7*nrow(selected_game_df[,-c(30)]), replace = FALSE)
 TrainSet <- selected_game_df[train,]
 ValidSet <- selected_game_df[-train,]
@@ -549,7 +570,7 @@ TrainSet <- clean_names(TrainSet)#removing spaces and special characters from co
 ValidSet <- clean_names(ValidSet)
 
 # Create a Random Forest model with default parameters
-model1 <- randomForest(game_rating ~ ., data = TrainSet, importance = TRUE)
+#model1 <- randomForest(game_rating ~ ., data = TrainSet, importance = TRUE)
 
 # Fine tuning parameters of Random Forest model
 model2 <- randomForest(game_rating ~ ., data = TrainSet, ntree = 500, mtry = 6, importance = TRUE)
@@ -578,7 +599,7 @@ table(predTrain, TrainSet$game_rating)
 #predValid <- predict(model2, ValidSet, type = "class")
 predValid <- predict(model2, ValidSet)
 
-# Checking classification accuracy
+# Checking accuracy
 mean(predValid == ValidSet$game_rating)                    
 table(predValid,ValidSet$game_rating)
 
@@ -591,42 +612,13 @@ data.frame(
   R2 = R2(predValid,ValidSet$game_rating)
 )
 
-
-######################## test #####################
-library(rpart)  
-set.seed(12345)
-# Training with classification tree
-modfit.rpart <- rpart(game_rating ~ ., data=TrainSet, method="class", xval = 4)
-print(modfit.rpart, digits = 3)
-
-
-
-
-predictions1 <- predict(modfit.rpart, ValidSet, type = "class")
-
-# Accuracy and other metrics
-confusionMatrix(predictions1, as.factor(ValidSet$game_rating))
-
-
-
-
-
-# Predict the testing set with the trained model 
-predictions1 <- predict(modfit.rpart, testing, type = "class")
-
-# Accuracy and other metrics
-confusionMatrix(predictions1, testing$classe)
-
-
+plot(predValid,ValidSet$game_rating,col = c("red","black") , pch = 19)
 ########################################################################
-library(caret)
-control_xgb <- trainControl(method="repeatedcv", number=10, repeats=5, search="random")
-set.seed(1337)
-
-xgbm_random <- caret::train(game_rating ~ .,data=TrainSet,
-                            method="xgbTree",
-                            trControl=control_xgb)
+# library(caret)
+# control_xgb <- trainControl(method="repeatedcv", number=10, repeats=5, search="random")
+# set.seed(1337)
+# 
+# xgbm_random <- caret::train(game_rating ~ .,data=TrainSet,
+#                             method="xgbTree",
+#                             trControl=control_xgb)
 ##########################################
-#PCA
-tcars.pca <- prcomp(selected_game_df[,-c(2)], center = TRUE,scale. = TRUE)
-
