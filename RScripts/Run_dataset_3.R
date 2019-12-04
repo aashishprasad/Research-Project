@@ -4,7 +4,7 @@ library(mltools)
 library(caret)
 library(dplyr)
 
-data <- read.csv("D:/DA/Semester_3/Research Project/Dataset/final_video_game_dataset_4.csv")
+data <- read.csv("D:/DA/Semester_3/Research Project/Dataset/final_video_game_dataset_3.csv")
 data <- data[,-c(1)]
 #################################################################
 data_age_ratings <- one_hot(as.data.table(data$age_rating))
@@ -47,8 +47,8 @@ game_df <- attStats(boruta.game)
 #################################################################
 library(data.table)
 setDT(game_df, keep.rownames = TRUE)[]
-write.csv(game_df, file = "D:/DA/Semester_3/Research Project/Dataset/boruta_result_dataset_4.csv",fileEncoding = 'UTF-8')
-selected_game_df <- df[,c(12,2,13,25,35:44,57,63,97,100,116,120:122,175,177,181,182,185,207,226)]
+write.csv(game_df, file = "D:/DA/Semester_3/Research Project/Dataset/boruta_result_dataset_3.csv",fileEncoding = 'UTF-8')
+selected_game_df <- df[,c(1,2,6:8,12:15,17,19,27,28,32,33,35:44,56:58,62,64,65,68,74,78,80,92,97,100,103,107,111,113,122,123,127,128,134,150,182,184,185,187:189,193,234)]
 
 #Run if excluding Boruta
 #selected_game_df <- df
