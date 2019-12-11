@@ -22,6 +22,7 @@ df <- cbind(df,data_developer)
 df <- df[,-c(1:3,5)]
 
 #################################################################
+#https://www.datacamp.com/community/tutorials/feature-selection-R-boruta
 library(Boruta)
 set.seed(111)
 boruta.game_train <- Boruta(game_rating~., data = df, doTrace = 2)
@@ -113,6 +114,7 @@ data.frame(
 plot(y_pred,testing$game_rating,col = c("blue") , pch = 19,xlab = 'Predicted', ylab = 'Actual', abline(a=1,b=1))
 
 ############################ XGBoost #####################################
+#https://datascienceplus.com/extreme-gradient-boosting-with-r
 library(xgboost)
 
 training <- train
